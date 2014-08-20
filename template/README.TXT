@@ -1,0 +1,1 @@
+Do not edit the files in the template/ directory (unless you know what you are doing). They are used by the python program to generate custom configuration files and custom bash script, which will create the FreeBSD image suitable for a Raspberry Pi.

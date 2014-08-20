@@ -9,7 +9,7 @@ def set_defaults_opts():
 
   # General settings
   def_opts['output_script_file'] = 'freebsd-builder-rpi.sh'
-  def_opts['output_config_file'] = 'config'
+  def_opts['output_conf_file'] = 'settings.sh'
 
   # Compilation settings
   def_opts['gpu_mem'] = '128'
@@ -44,7 +44,7 @@ def set_defaults_opts():
 def read_conf(config_file, build_opts):
   """
   Read configuration file. Ignore lines starting with #,
-  and clean trailing whitespaces, then set the specified values
+  and ignore trailing whitespaces, then set the specified values
   """
 
   f = open(config_file) # Todo: error handling
