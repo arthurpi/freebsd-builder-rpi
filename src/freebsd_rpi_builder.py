@@ -3,6 +3,7 @@
 import sys
 import settings_init
 import settings_check
+import init_curses
 from string import Template
 from optparse import OptionParser
 
@@ -59,6 +60,7 @@ def main():
     settings_init.read_conf(cli_opts.config_file, build_opts) # Todo: error handling
 
   if cli_opts.gui == True:
+    init_curses.start_curses_gui(build_opts)
     # Start GUI
     None 
 
@@ -71,8 +73,6 @@ def main():
   # Create final script and settings
   output_script = templ_script.safe_substitute(build_opts)
   output_settings = templ_settings.safe_substitute(build_opts)
-  print(output_script)
-  print(output_settings)
   sys.exit(0)
 
 if __name__ == '__main__':
