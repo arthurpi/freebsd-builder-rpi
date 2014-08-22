@@ -3,7 +3,6 @@
 import sys
 import curses
 import time
-import event_curses
 import menu_initialisation
 
 def init_attributes(stdscr):
@@ -66,6 +65,10 @@ def main_event(stdscr, menu_win, ctn_win, menus):
       if menus[cur_menu][pos][0] in menus:
         cur_menu = menus[cur_menu][pos][0]
         pos = 0
+    if pos < 0:
+      pos = len(menus[cur_menu]) - 1
+    elif pos > len(menus[cur_menu]) - 1:
+      pos = 0
     ctn_win.clear()
     fill_menu(menus[cur_menu], ctn_win, pos)
     refresh_screen(stdscr, menu_win, ctn_win)

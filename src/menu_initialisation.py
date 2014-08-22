@@ -20,18 +20,18 @@ def main_menu_init():
 
 def general_menu_init():
   menu = []
-  menu.append(("output_script_file", "Change where the generated script will be written at"))
-  menu.append(("output_conf_file", "Change where the generated configuration file will be written at"))
+  menu.append(("output_script_file", "Name of the generated script file"))
+  menu.append(("output_conf_file", "Name of the generated configuration file"))
   return menu
 
 def build_menu_init():
   menu = []
-  menu.append(("src_root", "Specify the source directory of FreeBSD"))
-  menu.append(("obj_root", "Specify where obj file will be stored during compilation of FreeBSD"))
+  menu.append(("src_root", "Source directory of FreeBSD"))
+  menu.append(("obj_root", "Object directory of FreeBSD"))
   menu.append(("clean_obj", "Clean object file when compilation is done?"))
-  menu.append(("mnt_dir", "Specify a directory where the FreeBSD image will be mount on"))
+  menu.append(("mnt_dir", "Directory where the FreeBSD image will be mount on"))
   menu.append(("do_compile", "Compile the project? (yes) Use previously built OS? (no)"))
-  menu.append(("img_name", "Specify where the image of FreeBSD will be saved"))
+  menu.append(("img_name", "Where the image of FreeBSD will be saved"))
 
   return menu
 

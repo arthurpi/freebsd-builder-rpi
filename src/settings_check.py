@@ -38,14 +38,12 @@ def mnt_folder(mnt_dir):
   return 0
 
 def malloc_production_redefined(src_root):
-  # Todo: error handling
   try:
     f = open(os.path.join(src_root, "contrib/jemalloc/include/jemalloc/jemalloc_FreeBSD.h"), "r")
     text = f.read()
     f.close()
     match = re.search(r'[\s]*#define[\s]+MALLOC_PRODUCTION', text)
     if match != None:
-      # WARNING
       print("Compilation might fail, MALLOC_PRODUCTION is defined twice")
       return 1
   except FileNotFoundError:
