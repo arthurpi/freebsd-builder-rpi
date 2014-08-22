@@ -7,7 +7,6 @@ def dict_menus_init():
   dict_menus["build"] = build_menu_init()
   return dict_menus
 
-
 def main_menu_init():
   menu = []
   menu.append(("general", "General settings --->"))

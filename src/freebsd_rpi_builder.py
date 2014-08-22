@@ -3,7 +3,7 @@
 import sys
 import settings_init
 import settings_check
-import init_curses
+import curses_init
 from string import Template
 from optparse import OptionParser
 
@@ -60,7 +60,7 @@ def main():
     settings_init.read_conf(cli_opts.config_file, build_opts) # Todo: error handling
 
   if cli_opts.gui == True:
-    init_curses.start_curses_gui(build_opts)
+    curses_init.start_curses_gui(build_opts)
     # Start GUI
     None 
 
