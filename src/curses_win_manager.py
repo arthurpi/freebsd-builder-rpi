@@ -7,18 +7,21 @@ class windowManager:
   def __init__(self):
     self._too_small = False
     self._stdscr = curses.initscr()
+    (self._LINES, self._COLS) = self._stdscr.getmaxyx()
     curses.noecho()
     curses.cbreak()
     curses.curs_set(0)
     if curses.has_colors():
       curses.start_color()
-      curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE) # background
-      curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_CYAN) # box
-      curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK) # select line
+      curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE) # bkgd
+      curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_CYAN) # content box bkgd
+      curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK) # selected line
       curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_CYAN) # line
+      curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_MAGENTA) # field
     try:
-      self._menu_win = curses.newwin(curses.LINES - 7, curses.COLS - 7, 3, 3)
-      self._ctn_win = self._menu_win.subwin(curses.LINES - 11, curses.COLS - 11, 5, 5)
+      self._menu_win = curses.newwin(self._LINES - 7, self._COLS - 7, 3, 3)
+      self._ctn_win = self._menu_win.subwin(self._LINES - 11, self._COLS - 11, 5, 5)
+      self._field_win = self._ctn_win.subwin(self._LINES - 15, self._COLS - 15, 7, 7)
     except curses.error:
       print("Windows is too small. Exiting...", file=sys.stderr)
 
@@ -37,8 +40,10 @@ class windowManager:
     self._stdscr.bkgd(' ', curses.color_pair(1))
     self._menu_win.bkgd(' ', curses.color_pair(2))
     self._ctn_win.bkgd(' ', curses.color_pair(2))
-    self._stdscr.addstr(0, 1, "FreeBSD builder for Raspberry Pi", curses.color_pair(0))
-    self._stdscr.addstr(LINES - 3, 0, "Press 'q' to quit and generate the settings file and the script", curses.color_pair(0))
+    self._stdscr.addstr(0, 1, "FreeBSD builder for Raspberry Pi",
+                        curses.color_pair(0))
+    self._stdscr.addstr(LINES - 3, 0, "Press 'q' to quit and generate the "\
+                        "settings file and the script", curses.color_pair(0))
 
   def clear_all(self):
     self._stdscr.clear()
@@ -53,13 +58,12 @@ class windowManager:
 
   def resize_wins(self):
     self.clear_all()
-    (LINES, COLS) = self._stdscr.getmaxyx()
+    (self._LINES, self._COLS) = self._stdscr.getmaxyx()
     try:
-      self._stdscr.resize(LINES, COLS)
-      self._menu_win.resize(LINES - 7, COLS - 7)
-      self._ctn_win.resize(LINES - 11, COLS - 11)
+      self._stdscr.resize(self._LINES, self._COLS)
+      self._menu_win.resize(self._LINES - 7, self._COLS - 7)
+      self._ctn_win.resize(self._LINES - 11, self._COLS - 11)
       self.init_wins()
       self._too_small = False
     except curses.error:
       self._too_small = True
-      print("Windows is too small. Exiting...", file=sys.stderr)

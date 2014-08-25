@@ -1,11 +1,10 @@
 #!/usr/local/bin/python3.4 -tt
 
+import time
 import sys
 import curses
 from curses.textpad import Textbox, rectangle
-import time
-import curses_menu_init
-from curses_menu_init import menuManager
+from curses_menu_manager import menuManager
 from curses_win_manager import windowManager
 
 def draw_menu(menu_man, win):
@@ -14,10 +13,25 @@ def draw_menu(menu_man, win):
     win.addstr(index * 2, 0, menu[index][1], curses.color_pair(4))
   win.chgat(menu_man._cur_pos * 2, 0, -1, curses.color_pair(3))
 
+def draw_edit_box(menu_man, win_man, build_opts):
+  ## CANCER
+  curses.curs_set(1)
+  win_man._field_win.bkgd(' ', curses.color_pair(5))
+  win_man._field_win.addstr(0, 0, menu_man.get_verbose_cur_field(),
+                            curses.color_pair(5))
+  win_man._field_win.addstr(3, 0, build_opts[menu_man._cur_field],
+                            curses.color_pair(5))
+  win_man._field_win.noutrefresh()
+  curses.doupdate()
+  curses.curs_set(0)
+  menu_man._cur_field = ""
+  time.sleep(5)
+  ## /CANCER
 
-def main_event(menu_man, win_man):
+
+
+def main_event(menu_man, win_man, build_opts):
   while True:
-    # Chars handled: arrows, return, q, resize
     c = win_man._ctn_win.getch()
     if win_man._too_small or c == ord('c') or c == curses.KEY_RESIZE: # Resize
       win_man.resize_wins()
@@ -32,8 +46,7 @@ def main_event(menu_man, win_man):
     elif c == ord('l') or c == curses.KEY_RIGHT or c == 10: # Go in
       menu_man.enter_selected_menu()
       if menu_man._cur_field:
-        pass
-        # Edit field mode then empty _cur_field
+        draw_edit_box(menu_man, win_man, build_opts)
     elif c == ord('h') or c == curses.KEY_LEFT or c == curses.KEY_BACKSPACE or c == 127: # Go back
       menu_man.to_previous_menu()
     try:
@@ -51,4 +64,4 @@ def start_curses_gui(build_opts):
     draw_menu(menu_man, win_man._ctn_win)
     win_man.refresh_all()
     win_man._ctn_win.keypad(True)
-    main_event(menu_man, win_man)
+    main_event(menu_man, win_man, build_opts)

@@ -3,7 +3,6 @@
 import sys
 import settings_init
 import settings_check
-import curses_init
 import curses_gui
 from curses_win_manager import windowManager
 from string import Template

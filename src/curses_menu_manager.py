@@ -64,6 +64,7 @@ class menuManager:
     if self._menus[self._cur_menu][self._cur_pos][0] in self._menus:
       self._prev_menus.insert(0, self._cur_menu)
       self._cur_menu = self._menus[self._cur_menu][self._cur_pos][0]
+      self._cur_pos = 0
     else:
       self._cur_field = self._menus[self._cur_menu][self._cur_pos][0]
 
@@ -71,3 +72,7 @@ class menuManager:
     if self._prev_menus:
       self._cur_menu = self._prev_menus[0]
       self._prev_menus.pop(0)
+      self._cur_pos = 0
+
+  def get_verbose_cur_field(self):
+    return self._menus[self._cur_menu][self._cur_pos][1]
