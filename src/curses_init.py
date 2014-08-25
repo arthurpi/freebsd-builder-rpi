@@ -5,9 +5,10 @@ import curses
 from curses.textpad import Textbox, rectangle
 import time
 import curses_menu_init
+from curses_menu_init import menuManager
+from curses_win_manager import windowManager
 
 def init_attributes(stdscr):
-  curses.start_color()
   curses.noecho()
   curses.cbreak()
   curses.curs_set(0)
@@ -25,15 +26,31 @@ def clean_up_curses(stdscr):
   curses.endwin()
 
 def init_backgrounds(stdscr, build_opts):
+  print(curses.LINES, curses.COLS, file=sys.stderr)
   menu_win = curses.newwin(curses.LINES - 7, curses.COLS - 7, 3, 3)
   ctn_win = menu_win.subwin(curses.LINES - 11, curses.COLS - 11, 5, 5)
   stdscr.bkgd(' ', curses.color_pair(1))
   menu_win.bkgd(' ', curses.color_pair(2))
   ctn_win.bkgd(' ', curses.color_pair(2))
-  stdscr.addstr(0, 1, "FreeBSD builder. Settings file: {}".\
-                format(build_opts['output_conf_file']), curses.color_pair(0))
+  stdscr.addstr(0, 1, "FreeBSD builder for Raspberry Pi", curses.color_pair(0))
   stdscr.addstr(curses.LINES - 2, 0, "Press 'q' to quit and generate the settings file and the script", curses.color_pair(0))
   return (menu_win, ctn_win)
+
+def adjust_wins_size(stdscr, menu_win, ctn_win):
+  try:
+    (maxy, maxx) = stdscr.getmaxyx()
+    curses.resizeterm(maxy, maxx)
+    print(maxy, maxx, file=sys.stderr)
+    menu_win.resize(maxy - 7, maxx - 7, 3, 3)
+    ctn_win.resize(maxy- 11, maxx - 11, 5, 5)
+    stdscr.bkgd(' ', curses.color_pair(1))
+    menu_win.bkgd(' ', curses.color_pair(2))
+    ctn_win.bkgd(' ', curses.color_pair(2))
+    stdscr.addstr(0, 1, "FreeBSD builder for Raspberry Pi", curses.color_pair(0))
+    stdscr.addstr(maxy - 2, 0, "Press 'q' to quit and generate the settings file and the script", curses.color_pair(0))
+    return True
+  except:
+    return False
 
 def fill_menu(menu, ctn_win, pos):
   for index in range(len(menu)):
@@ -94,15 +111,22 @@ def main_event(stdscr, menu_win, ctn_win, menus, build_opts):
   editing = False
   while True:
     c = ctn_win.getch()
+    if c == curses.KEY_RESIZE or c == ord('c'):
+      adjust_wins_size(stdscr, menu_win, ctn_win)
     if not editing:
       (pos, cur_menu, editing) = browse_menu(c, pos, menus, cur_menu, ctn_win)
       if pos == -1:
         break
     if editing:
       (pos, cur_menu, editing) = edit_field(c, menus, cur_menu, pos, ctn_win, build_opts)
+    stdscr.clear()
+    menu_win.clear()
     ctn_win.clear()
     fill_menu(menus[cur_menu], ctn_win, pos)
-    refresh_screen([ctn_win])
+    refresh_screen([stdscr, menu_win, ctn_win])
+
+def oop_main_event():
+  pass
 
 def start_curses_gui(build_opts):
   # Init
@@ -110,8 +134,10 @@ def start_curses_gui(build_opts):
   init_attributes(stdscr)
   (menu_win, ctn_win) = init_backgrounds(stdscr, build_opts)
 
-  menus = curses_menu_init.dict_menus_init()
-  fill_menu(menus["main"], ctn_win, 0)
+  menu_manager = menuManager()
+  fill_menu(menu_manager._menus["main"], ctn_win, 0)
+
+  menus = menu_manager._menus
   refresh_screen([stdscr, menu_win, ctn_win])
 
   # Call loop
