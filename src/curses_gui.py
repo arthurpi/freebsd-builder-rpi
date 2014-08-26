@@ -3,9 +3,9 @@
 import time
 import sys
 import curses
-from curses.textpad import Textbox, rectangle
 from curses_menu_manager import menuManager
 from curses_win_manager import windowManager
+from curses.textpad import Textbox, rectangle
 
 def draw_menu(menu_man, win):
   menu = menu_man.get_selected_menu()
@@ -14,21 +14,33 @@ def draw_menu(menu_man, win):
   win.chgat(menu_man._cur_pos * 2, 0, -1, curses.color_pair(3))
 
 def draw_edit_box(menu_man, win_man, build_opts):
-  ## CANCER
+  ## BUGGY
   curses.curs_set(1)
+  # Add title of the box
   win_man._field_win.bkgd(' ', curses.color_pair(5))
   win_man._field_win.addstr(0, 0, menu_man.get_verbose_cur_field(),
                             curses.color_pair(5))
-  win_man._field_win.addstr(3, 0, build_opts[menu_man._cur_field],
-                            curses.color_pair(5))
+  win_man._field_win.chgat(0, 0, -1, curses.color_pair(1))
+  # Create the window that will holds the text
+  (YMAX, XMAX) = win_man._field_win.getmaxyx()
+  (YBEG, XBEG) = win_man._field_win.getparyx()
+  text_win = curses.newwin(YMAX, XMAX, YBEG + 7, XBEG + 5)
+  text_win.bkgd(' ', curses.color_pair(5))
+  text_win.addstr(0, 0, build_opts[menu_man._cur_field],
+                   curses.color_pair(5))
+  # Refresh both windows
   win_man._field_win.noutrefresh()
+  text_win.noutrefresh()
   curses.doupdate()
+  # Create a textbox
+  box = Textbox(text_win)
+  box.edit()
+  build_opts[menu_man._cur_field] = box.gather()
+  del text_win
   curses.curs_set(0)
   menu_man._cur_field = ""
-  time.sleep(5)
+  win_man.resize_wins()
   ## /CANCER
-
-
 
 def main_event(menu_man, win_man, build_opts):
   while True:
@@ -37,7 +49,7 @@ def main_event(menu_man, win_man, build_opts):
       win_man.resize_wins()
       if win_man._too_small:
         continue
-    elif c == ord('q'): # Exit
+    if c == ord('q'): # Exit
       break
     elif c == ord('j') or c == curses.KEY_DOWN: # Down
       menu_man.incr_pos()

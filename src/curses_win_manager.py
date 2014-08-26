@@ -17,11 +17,11 @@ class windowManager:
       curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_CYAN) # content box bkgd
       curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK) # selected line
       curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_CYAN) # line
-      curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_MAGENTA) # field
+      curses.init_pair(5, curses.COLOR_BLACK, curses.COLOR_WHITE) # field
     try:
       self._menu_win = curses.newwin(self._LINES - 7, self._COLS - 7, 3, 3)
       self._ctn_win = self._menu_win.subwin(self._LINES - 11, self._COLS - 11, 5, 5)
-      self._field_win = self._ctn_win.subwin(self._LINES - 15, self._COLS - 15, 7, 7)
+      self._field_win = self._ctn_win.subwin(self._LINES // 2, self._COLS - 15, 10, 7)
     except curses.error:
       print("Windows is too small. Exiting...", file=sys.stderr)
 
@@ -63,7 +63,19 @@ class windowManager:
       self._stdscr.resize(self._LINES, self._COLS)
       self._menu_win.resize(self._LINES - 7, self._COLS - 7)
       self._ctn_win.resize(self._LINES - 11, self._COLS - 11)
+      self._field_win.resize(self._LINES // 2, self._COLS - 15)
       self.init_wins()
       self._too_small = False
     except curses.error:
       self._too_small = True
+
+  def init_field_win(self, field_verbose, field_value):
+    (LINES, COLS) = self._field_win.getmaxyx()
+    #self._field_win.resize(int(LINES - 1 / 3), COLS)
+    _field_win.resize(LINES // 2, COLS)
+    _field_win.bkgd(' ', curses.color_pair(5))
+    _field_win.addstr(0, 0, field_verbose,
+                      curses.color_pair(5))
+    _field_win.addstr(3, 0, field_value,
+                      curses.color_pair(5))
+    _field_win.noutrefresh()
