@@ -1,8 +1,10 @@
 #!/bin/sh
+
+# Abort when a command fails
 set -e
 
 # Settings
-export GPU_MEM=$gpu_mem
+export GPU_MEM=$gpu_mem # ok
 export KERN_CONF=$kern_conf
 export SRC_ROOT=$src_root
 export OBJ_ROOT=$obj_root
@@ -29,9 +31,13 @@ export MAKESYSPATH=$SRC_ROOT/share/mk
 # Checks to do in the script
 # user == root
 
+if [ $(whoami) != "root" ]; then
+  echo "This script must be executed as root. Abort..."
+  exit 1
+fi
 
 if [ -z "$MNT_DIR" ]; then
-  echo "MNT_DIR is not set properly"
+  echo "MNT_DIR is not set properly. Aborting..."
   exit 1
 fi
 

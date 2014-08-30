@@ -10,6 +10,8 @@ def set_defaults_opts():
   # General settings
   def_opts['output_script_file'] = 'freebsd-builder-rpi.sh'
   def_opts['output_conf_file'] = 'settings.sh'
+  def_opts['user'] = 'pi'
+  def_opts['pw'] = 'raspberry'
 
   # Compilation settings
   def_opts['gpu_mem'] = '128'
@@ -22,17 +24,15 @@ def set_defaults_opts():
   def_opts['clean_obj'] = "no"
 
   # Partition settings
-  def_opts['user'] = 'pi'
-  def_opts['pw'] = 'raspberry'
-  def_opts['sd_card_size'] = '1 GB'
-  def_opts['img_size_raw'] = '0' # Default to zero if sd_card_size is specified to compute optimal size
-  def_opts['partition_scheme'] = {'/': 'rest'}
+  def_opts['sd_card_size'] = '1 GB' # Manufacturer size (if img_size_raw == no) or raw size (if img_size_raw == yes)
+  def_opts['img_size_raw'] = 'no' # Default to zero if sd_card_size is specified to compute optimal size
+  def_opts['partition_scheme'] = "'/': 'rest'"
   def_opts['swap'] = '0 GB' # If equals 0, do not create swap partition
   def_opts['disk_tune'] = "yes"# Todo: allow user to specify more options
 
   # Pre-built packages settings
   def_opts['port_tree'] = "no"
-  def_opts['pkg_prebuilt'] = []
+  def_opts['pkg_prebuilt'] = ""
 
   # Firmware files
   # Todo: path.join etc

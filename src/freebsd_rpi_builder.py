@@ -1,6 +1,8 @@
 #!/usr/local/bin/python3.4 -tt
 
 import sys
+import os
+import stat
 import settings_init
 import settings_check
 import curses_gui
@@ -44,11 +46,10 @@ def read_templ_files():
     templ_settings = Template(f.read())
     f.close()
   except FileNotFoundError:
-    print("Missing template file(s) in template/. Try to restore the git repo"\
+    print("Missing template file(s) in ./template/. Try to restore the git repo"\
           " Exiting program...")
     sys.exit(1)
   return (templ_script, templ_settings)
-
 
 def main():
   # Set defaults
@@ -71,8 +72,15 @@ def main():
           "setup".format(nerrors))
 
   # Create final script and settings
-  output_script = templ_script.safe_substitute(build_opts)
+  f_conf = open(build_opts['output_conf_file'], "w+")
+  f_script = open(build_opts['output_script_file'], "w+")
   output_settings = templ_settings.safe_substitute(build_opts)
+  output_script = templ_script.safe_substitute(build_opts)
+  f_conf.write(output_settings)
+  f_script.write(output_script)
+  os.chmod(build_opts['output_script_file'], stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IXOTH)
+  f_conf.close()
+  f_script.close()
   sys.exit(0)
 
 if __name__ == '__main__':

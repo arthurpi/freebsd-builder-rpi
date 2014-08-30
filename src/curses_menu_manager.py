@@ -15,6 +15,9 @@ class menuManager:
     self.main_menu_init()
     self.general_menu_init()
     self.build_menu_init()
+    self.kernel_menu_init()
+    self.part_menu_init()
+    self.pkg_menu_init()
 
   def main_menu_init(self):
     menu = []
@@ -30,6 +33,8 @@ class menuManager:
     menu = []
     menu.append(("output_script_file", "Name of the generated script file"))
     menu.append(("output_conf_file", "Name of the generated configuration file"))
+    menu.append(("user", "Name of the user on the new system"))
+    menu.append(("pw", "Password of the user on the new system"))
     self._menus["general"] = menu
 
   def build_menu_init(self):
@@ -40,7 +45,29 @@ class menuManager:
     menu.append(("mnt_dir", "Directory where the FreeBSD image will be mount on"))
     menu.append(("do_compile", "Compile the project? (yes) Use previously built OS? (no)"))
     menu.append(("img_name", "Where the image of FreeBSD will be saved"))
+    menu.append(("uboot_dir", "Directory where RPi firmware files are"))
     self._menus["build"] = menu
+
+  def kernel_menu_init(self):
+    menu = []
+    menu.append(("gpu_mem", "Set how much MB is assign to the GPU"))
+    menu.append(("kern_conf", "Specify a custom kernel configuration file"))
+    self._menus["kernel"] = menu
+
+  def part_menu_init(self):
+    menu = []
+    menu.append(("sd_card_size", "Size of SD card (manufacturer size by default)"))
+    menu.append(("img_size_raw", "If set to no, use manufacturer sd card size, else use raw size"))
+    menu.append(("partition_scheme", "Custom user partitions. One partition per line. Exemple: /home 1 GB"))
+    menu.append(("swap", "Specify the size of the swap partition. (set to 0 if you don't want one)"))
+    menu.append(("disk_tune", "Disk tuning (yes/no)"))
+    self._menus["part"] = menu
+
+  def pkg_menu_init(self):
+    menu = []
+    menu.append(("port_tree", "Fetch the ports tree onto the new system"))
+    menu.append(("pkg_prebuilt", "List of package you want to be prebuilt. (space separated"))
+    self._menus["pkg"] = menu
 
   def is_editbox(self):
     if self._menus[self._cur_menu][self._cur_pos][0] in _menus:

@@ -35,15 +35,19 @@ class windowManager:
     curses.curs_set(1)
     curses.endwin()
 
-  def init_wins(self):
+  def init_wins(self, mode):
     (LINES, COLS) = self._stdscr.getmaxyx()
     self._stdscr.bkgd(' ', curses.color_pair(1))
     self._menu_win.bkgd(' ', curses.color_pair(2))
     self._ctn_win.bkgd(' ', curses.color_pair(2))
     self._stdscr.addstr(0, 1, "FreeBSD builder for Raspberry Pi",
                         curses.color_pair(0))
-    self._stdscr.addstr(LINES - 3, 0, "Press 'q' to quit and generate the "\
-                        "settings file and the script", curses.color_pair(0))
+    if mode == "menu_mode":
+      help_msg = "Press 'q' to quit and generate the settings file and the script. "\
+          "Use arrow keys (or hjkl) to navigate in the menus."
+    else:
+      help_msg = "Edit mode. Emacs-like bindings. Press Ctrl+g when you are done editing."
+    self._stdscr.addstr(LINES - 3, 0, help_msg, curses.color_pair(0))
 
   def clear_all(self):
     self._stdscr.clear()
@@ -56,7 +60,7 @@ class windowManager:
     self._ctn_win.noutrefresh()
     curses.doupdate()
 
-  def resize_wins(self):
+  def resize_wins(self, mode):
     self.clear_all()
     (self._LINES, self._COLS) = self._stdscr.getmaxyx()
     try:
@@ -64,7 +68,7 @@ class windowManager:
       self._menu_win.resize(self._LINES - 7, self._COLS - 7)
       self._ctn_win.resize(self._LINES - 11, self._COLS - 11)
       self._field_win.resize(self._LINES // 2, self._COLS - 15)
-      self.init_wins()
+      self.init_wins(mode)
       self._too_small = False
     except curses.error:
       self._too_small = True

@@ -1,0 +1,63 @@
+##
+# Every setting as a default value. To use the default value, either leave a
+# blank after the setting name, or comment the line
+
+# Default value: freebsd-builder-rpi.sh
+output_script_file freebsd-builder-rpi.sh
+
+# Default value: settings.sh
+output_conf_file settings.sh
+
+
+# Default value: 128
+gpu_mem 128
+
+# Default value: RPI-B
+kern_conf RPI-B
+
+# Default value: /usr/src/freebsd
+src_root /usr/src/freebsd
+
+# Default value: /usr/obj/freebsd
+obj_root /usr/obj/freebsd
+
+# Default value: /mnt
+mnt_dir /mnt
+
+# Default value: /usr/obj/freebsd/fbsd-rpi.img
+img_name /usr/obj/freebsd/fbsd-rpi.img
+
+# Default value: no
+clean_obj no
+
+# Default value: ./firmware
+uboot_dir ./firmware
+
+
+# Default value: pi
+user pi
+
+# Default value: raspberry
+pw raspberry
+
+# Default value: 1 GB
+sd_card_size 1 GB
+
+# Default value: no
+img_size_raw no
+
+# Default value: / rest
+partition_scheme '/': 'rest'
+
+# Default value: 0
+swap 0 GB
+
+# Default value: no
+disk_tune yes
+
+
+# Default value: no
+port_tree no
+
+# Default value: none
+pkg_prebuilt 
