@@ -37,7 +37,7 @@ def draw_edit_box(menu_man, win_man, build_opts):
   # Create a textbox
   box = Textbox(text_win)
   box.edit()
-  build_opts[menu_man._cur_field] = box.gather()[:-1]
+  build_opts[menu_man._cur_field] = box.gather()[:-2]
   del text_win
   curses.curs_set(0)
   menu_man._cur_field = ""
