@@ -46,14 +46,14 @@ sd_card_size 1 GB
 # Default value: no
 img_size_raw no
 
-# Default value: / rest
-partition_scheme '/': 'rest'
+# Default value: /: rest
+partition_scheme /: rest
 
 # Default value: 0
 swap 0 GB
 
 # Default value: no
-disk_tune yes
+disk_tune no
 
 
 # Default value: no

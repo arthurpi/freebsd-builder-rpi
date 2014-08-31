@@ -22,7 +22,7 @@ class menuManager:
   def main_menu_init(self):
     menu = []
     menu.append(("general", "General settings --->"))
-    menu.append(("err", "Check for errors"))
+    #menu.append(("err", "Check for errors"))
     menu.append(("build", "Compilation settings --->"))
     menu.append(("kernel", "Kernel settings --->"))
     menu.append(("part", "Partition scheme --->"))

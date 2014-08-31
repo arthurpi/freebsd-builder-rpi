@@ -26,7 +26,7 @@ def set_defaults_opts():
   # Partition settings
   def_opts['sd_card_size'] = '1 GB' # Manufacturer size (if img_size_raw == no) or raw size (if img_size_raw == yes)
   def_opts['img_size_raw'] = 'no' # Default to zero if sd_card_size is specified to compute optimal size
-  def_opts['partition_scheme'] = "'/': 'rest'"
+  def_opts['partition_scheme'] = "/: rest"
   def_opts['swap'] = '0 GB' # If equals 0, do not create swap partition
   def_opts['disk_tune'] = "yes"# Todo: allow user to specify more options
 
