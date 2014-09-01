@@ -5,6 +5,9 @@ This tool guides you through the creation of an image of FreeBSD suitable for a 
 
 It has been made to be user friendly, providing an optional Curses GUI, and checks the configuration to search for errors (work in progress). Not a lot of options are implemented yet, but I am working on it. Another alternative is the crochet-freebsd project (https://github.com/kientzle/crochet-freebsd) which supports many features. (and many boards, not only RPi)
 
+What you need:
+A FreeBSD operating system, with python3 and the curses library installed.
+
 How to use:
 Either run the tool ./freebsd_builder_rpi without any options, and it will fire up the curses GUI to help you configure your custom image, and create a bash script that you will need to execute (as a root) so it builds FreeBSD. This also saves your configuration so you can provide it next time to modify it through the GUI.
 

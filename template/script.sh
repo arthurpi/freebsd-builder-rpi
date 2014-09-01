@@ -13,6 +13,11 @@ export IMG_NAME=$img_name
 export DO_COMPILE=$do_compile
 export CLEAN_OBJ=$clean_obj
 
+
+
+export MAKEOBJDIRPREFIX=$obj_root
+
+
 export USER_NAME=$user
 export USER_PASSWORD=$pw
 
@@ -26,10 +31,6 @@ export UBOOT_DIR=$uboot_dir
 export TARGET_ARCH=armv6
 export MAKESYSPATH=$SRC_ROOT/share/mk
 # End Settings
-
-## 
-# Checks to do in the script
-# user == root
 
 if [ $(whoami) != "root" ]; then
   echo "This script must be executed as root. Abort..."
@@ -48,8 +49,9 @@ DTB=`realpath $OBJ_ROOT`/arm.armv6/`realpath $SRC_ROOT`/sys/$KERN_CONF/rpi.dtb
 if [ $DO_COMPILE = "yes" ]; then
   if [ $CLEAN_OBJ = "no" ]; then
     export OPTS="-DNO_CLEAN"
+  fi
   make -C $SRC_ROOT $OPTS kernel-toolchain
-  make -C $SRC_ROOT $OPTS KERN_CONF=$KERN_CONF WITH_FDT=yes buildkernel
+  make -C $SRC_ROOT $OPTS KERNCONF=$KERN_CONF WITH_FDT=yes buildkernel
   make -C $SRC_ROOT $OPTS MALLOC_PRODUCTION=yes buildworld
 fi
 
@@ -75,7 +77,7 @@ mount_msdosfs /dev/${MDFILE}s1 $MNT_DIR
 cp $UBOOT_DIR/* $MNT_DIR
 #fetch -q -o - http://people.freebsd.org/~gonzo/arm/rpi/freebsd-uboot-20130201.tar.gz | tar -x -v -z -C $MNT_DIR -f -
 
-cat >> $MNT_DIR/config.txt <<__EOC__
+cat >> $MNT_DIR/CONFIG.TXT<<__EOC__
 gpu_mem=$GPU_MEM
 device_tree=devtree.dat
 device_tree_address=0x100
@@ -87,7 +89,7 @@ if [ ! -f $DTB ]; then
   echo "DTB missing, doing it manually"
   dtc -O dtb -o $DTB 0 -p 1024 `realpath $SRC_ROOT`/sys/boot/fdt/dts/rpi.dts
 else
-  echo "DTB already present oO"
+  echo "DTB already present"
 fi
 cp $DTB $MNT_DIR/devtree.dat
 umount $MNT_DIR
