@@ -13,8 +13,8 @@ def gpu_mem_check(gpu_mem):
   if (gpu_mem & (gpu_mem - 1)) != 0 or gpu_mem < 0:
     print("GPU_MEM={} -> Must be a positive power of two".format(gpu_mem))
     i = 1
-  if gpu_mem < 16 or gpu_mem > 256:
-    print("GPU_MEM={} -> Must be inside the range 16:256")
+  if gpu_mem < 32 or gpu_mem > 256:
+    print("GPU_MEM={} -> Must be inside the range 32:256 (16 is too low to allow the used u-boot to run properly")
     i = 1
   return i
 

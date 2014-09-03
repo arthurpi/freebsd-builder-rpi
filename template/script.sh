@@ -20,6 +20,8 @@ export USER_PASSWORD=$pw
 
 # ADD PARTITION DETAILS HERE
 
+export DISK_TUNE=$disk_tune
+
 export PORT_TREE=$port_tree
 export PKG_PREBUILT=$pkg_prebuilt
 
@@ -83,10 +85,7 @@ __EOC__
 
 cp $UBLDR $MNT_DIR
 if [ ! -f $DTB ]; then
-  echo "DTB missing, doing it manually"
   dtc -O dtb -o $DTB 0 -p 1024 `realpath $SRC_ROOT`/sys/boot/fdt/dts/rpi.dts
-else
-  echo "DTB already present"
 fi
 cp $DTB $MNT_DIR/devtree.dat
 umount $MNT_DIR
@@ -99,14 +98,16 @@ gpart add -t freebsd-ufs ${MDFILE}s2
 newfs /dev/${MDFILE}s2a
 
 # Turn on Softupdates
-tunefs -n enable /dev/${MDFILE}s2a
-# Turn on SUJ with a minimally-sized journal.
-# This makes reboots tolerable if you just pull power on the BB
-# Note:  A slow SDHC reads about 1MB/s, so a 30MB
-# journal can delay boot by 30s.
-tunefs -j enable -S 4194304 /dev/${MDFILE}s2a
-# Turn on NFSv4 ACLs
-tunefs -N enable /dev/${MDFILE}s2a
+if [ $DISK_TUNE = "yes" ]; then
+  tunefs -n enable /dev/${MDFILE}s2a
+  # Turn on SUJ with a minimally-sized journal.
+  # This makes reboots tolerable if you just pull power on the BB
+  # Note:  A slow SDHC reads about 1MB/s, so a 30MB
+  # journal can delay boot by 30s.
+  tunefs -j enable -S 4194304 /dev/${MDFILE}s2a
+  # Turn on NFSv4 ACLs
+  tunefs -N enable /dev/${MDFILE}s2a
+fi
 
 mount /dev/${MDFILE}s2a $MNT_DIR
 
@@ -139,6 +140,11 @@ ttyv5 "/usr/libexec/getty Pc" xterm on secure
 ttyv6 "/usr/libexec/getty Pc" xterm on secure
 ttyu0 "/usr/libexec/getty 3wire.115200" dialup on secure
 __EOTTYS__
+
+# Fetching port tree
+if [ $PORT_TREE = "YES" ]; then
+  portsnap -f $MNT_DIR/etc/portsnap.conf -p $MNT_DIR/usr/ports -d $MNT_DIR/var/db/portsnap fetch extract
+fi
 
 echo $USER_PASSWORD | pw -V $MNT_DIR/etc useradd -h 0 -n $USER_NAME -c "Raspberry Pi User" -s /bin/csh -m
 pw -V $MNT_DIR/etc groupmod wheel -m $USER_NAME

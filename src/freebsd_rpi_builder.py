@@ -78,6 +78,8 @@ def main():
   output_script = templ_script.safe_substitute(build_opts)
   f_conf.write(output_settings)
   f_script.write(output_script)
+  print("{} file created".format(build_opts['output_conf_file']))
+  print("{} file created".format(build_opts['output_script_file']))
   os.chmod(build_opts['output_script_file'], stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IXOTH)
   f_conf.close()
   f_script.close()
