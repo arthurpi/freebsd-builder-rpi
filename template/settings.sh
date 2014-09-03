@@ -30,6 +30,9 @@ img_name $img_name
 # Default value: no
 clean_obj $clean_obj
 
+# Default value: no
+do_compile $do_compile
+
 # Default value: ./firmware
 uboot_dir $uboot_dir
 

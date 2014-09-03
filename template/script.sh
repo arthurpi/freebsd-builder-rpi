@@ -3,25 +3,22 @@
 # Abort when a command fails
 set -e
 
-# Settings
-export GPU_MEM=$gpu_mem # ok
+# Setting
+export GPU_MEM=$gpu_mem
 export KERN_CONF=$kern_conf
+export KERNCONF=$kern_conf
 export SRC_ROOT=$src_root
 export OBJ_ROOT=$obj_root
+export MAKEOBJDIRPREFIX=$obj_root
 export MNT_DIR=$mnt_dir
 export IMG_NAME=$img_name
 export DO_COMPILE=$do_compile
 export CLEAN_OBJ=$clean_obj
 
-
-
-export MAKEOBJDIRPREFIX=$obj_root
-
-
 export USER_NAME=$user
 export USER_PASSWORD=$pw
 
-## ADD PARTITION DETAILS HERE
+# ADD PARTITION DETAILS HERE
 
 export PORT_TREE=$port_tree
 export PKG_PREBUILT=$pkg_prebuilt
