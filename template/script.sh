@@ -91,7 +91,7 @@ cp $DTB $MNT_DIR/devtree.dat
 umount $MNT_DIR
 
 # FreeBSD partition
-## Custom optional
+## Custom optional (TODO)
 gpart add -t freebsd ${MDFILE}
 gpart create -s BSD ${MDFILE}s2
 gpart add -t freebsd-ufs ${MDFILE}s2
@@ -145,6 +145,8 @@ __EOTTYS__
 if [ $PORT_TREE = "YES" ]; then
   portsnap -f $MNT_DIR/etc/portsnap.conf -p $MNT_DIR/usr/ports -d $MNT_DIR/var/db/portsnap fetch extract
 fi
+
+# TODO: list of packages to install
 
 echo $USER_PASSWORD | pw -V $MNT_DIR/etc useradd -h 0 -n $USER_NAME -c "Raspberry Pi User" -s /bin/csh -m
 pw -V $MNT_DIR/etc groupmod wheel -m $USER_NAME
